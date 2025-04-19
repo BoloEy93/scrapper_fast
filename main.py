@@ -1,10 +1,25 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from bs4 import BeautifulSoup
 import requests
 import json
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:3000",  # Example: Your local development frontend
+    "https://your-other-app-domain.com",  # Replace with the actual domain of your other app
+    "*",  # Be cautious with this in production; it allows all origins
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all HTTP methods (GET, POST, PUT, DELETE, etc.)
+    allow_headers=["*"],  # Allows all headers
+)
 
 SEARCH_URL = "https://minsante.cm/site/?q=fr/search/node/ambulance"
 scraped_data = []  # In-memory storage for scraped data
